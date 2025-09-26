@@ -1,0 +1,4 @@
+// Cropper.js 1.5.13 CDN
+// https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js
+// https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css
+// Se integra vía CDN en dashboard.html para recorte de foto de perfil.

@@ -1,0 +1,23 @@
+[
+  {
+    "nombre": "Admin User",
+    "email": "admin@uni.edu",
+    "password": "admin123",
+    "rol": "Administrador",
+    "activo": true
+  },
+  {
+    "nombre": "Bibliotecario",
+    "email": "biblio@uni.edu",
+    "password": "biblio123",
+    "rol": "Bibliotecario",
+    "activo": true
+  },
+  {
+    "nombre": "Estudiante Uno",
+    "email": "estu@uni.edu",
+    "password": "estu123",
+    "rol": "Estudiante",
+    "activo": true
+  }
+]

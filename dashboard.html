@@ -1,0 +1,928 @@
+    <script>
+    // Función para actualizar las carreras según la facultad seleccionada en el modal de editar perfil
+    function actualizarCarrerasEdit() {
+      const facultadSel = document.getElementById('editFacultad');
+      const carreraSel = document.getElementById('editCarrera');
+      const carrerasPorFacultad = {
+        'Facultad de Ingeniería y Arquitectura': [
+          'Ingeniería en Sistemas Informáticos',
+          'Ingeniería Civil',
+          'Arquitectura',
+          'Ingeniería Industrial',
+          'Ingeniería Eléctrica'
+        ],
+        'Facultad de Ciencias Económicas': [
+          'Administración de Empresas',
+          'Contaduría Pública'
+        ],
+        'Facultad de Ciencias y Humanidades': [
+          'Trabajo Social',
+          'Psicología',
+          'Educación',
+          'Idiomas'
+        ],
+        'Facultad de Ciencias de la Salud': [
+          'Enfermería',
+          'Medicina',
+          'Nutrición',
+          'Laboratorio Clínico'
+        ]
+      };
+      const fac = facultadSel.value;
+      carreraSel.innerHTML = '<option value="">-- Selecciona carrera --</option>';
+      if (carrerasPorFacultad[fac]) {
+        carreraSel.disabled = false;
+        carrerasPorFacultad[fac].forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          carreraSel.appendChild(opt);
+        });
+      } else {
+        carreraSel.disabled = true;
+      }
+    }
+    </script>
+<!-- Modal Visualización de Foto de Perfil -->
+  <div class="modal fade" id="modalVerFotoPerfil" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark text-center">
+        <div class="modal-body p-0">
+          <img id="imgVerFotoPerfil" src="assets/avatar-default.png" alt="Foto de perfil" style="max-width:100%;max-height:80vh;display:block;margin:auto;">
+        </div>
+      </div>
+    </div>
+  </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | BiblioSys</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="updatePhotoModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Actualizar foto de perfil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <form id="updatePhotoForm">
+          <div class="modal-body">
+            <div class="mb-3 text-center">
+              <div style="max-width:300px;margin:auto;">
+                <img id="previewFotoPerfil" src="assets/avatar-default.png" alt="preview" style="max-width:100%;max-height:300px;display:block;cursor:pointer;">
+              </div>
+            </div>
+            <div class="mb-3">
+              <input type="file" class="form-control" id="fotoPerfilInput" accept="image/*" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Actualizar foto</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="editProfileModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar perfil</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <form id="editProfileForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="editNombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="editNombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="editEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="editEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="editPassword" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="editPassword" required>
+            </div>
+            <div class="mb-3" id="facultadEditGroup" style="display:none;">
+              <label for="editFacultad" class="form-label">Facultad</label>
+              <select id="editFacultad" class="form-select">
+                <option value="">-- Selecciona facultad --</option>
+                <option value="Facultad de Ingeniería y Arquitectura">Facultad de Ingeniería y Arquitectura</option>
+                <option value="Facultad de Ciencias Económicas">Facultad de Ciencias Económicas</option>
+                <option value="Facultad de Ciencias y Humanidades">Facultad de Ciencias y Humanidades</option>
+                <option value="Facultad de Ciencias de la Salud">Facultad de Ciencias de la Salud</option>
+              </select>
+            </div>
+            <div class="mb-3" id="carreraEditGroup" style="display:none;">
+              <label for="editCarrera" class="form-label">Carrera</label>
+              <select id="editCarrera" class="form-select" disabled>
+                <option value="">-- Selecciona carrera --</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+  <img src="assets/logo.jpg" alt="Logo" height="38" class="me-2">
+        <span>BiblioSys</span>
+      </a>
+      <div class="d-flex gap-1" id="mainNavLinks"></div>
+      <div class="d-flex align-items-center ms-3 gap-2">
+        <button class="btn btn-link position-relative p-0 me-2" id="btnNotificaciones" title="Notificaciones" onclick="abrirModalNotificaciones()">
+          <span style="display:inline-block;background:#fff;border-radius:50%;box-shadow:0 2px 8px #0002;padding:6px;">
+            <i class="bi bi-bell" style="font-size:1.7em;color:#1E3A8A;"></i>
+          </span>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white shadow" id="badgeNotificaciones" style="display:none;font-size:1em;">0</span>
+        </button>
+        <div class="dropdown">
+          <a href="#" id="userAvatar" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="assets/avatar-default.png" alt="avatar" id="avatarImg" width="38" height="38" class="rounded-circle border border-2 border-light me-2">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userAvatar" id="userMenuDropdown">
+            <li class="px-3 py-2 text-center">
+              <div id="userMenuName" class="fw-bold"></div>
+              <div id="userMenuRol" class="text-muted small"></div>
+              <img id="userMenuFoto" src="assets/avatar-default.png" alt="Foto de perfil" style="width:60px;height:60px;object-fit:cover;border-radius:50%;margin:8px auto 0;display:block;cursor:pointer;border:2px solid #0ea5e9;">
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" onclick="window.showEditProfile()">Editar perfil</a></li>
+            <li><a class="dropdown-item" href="#" onclick="window.showUpdatePhoto()">Actualizar foto</a></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="window.logout()">Cerrar sesión</a></li>
+          </ul>
+        </div>
+      </div>
+  <!-- Modal Notificaciones -->
+  <div class="modal fade" id="modalNotificaciones" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-bell"></i> Notificaciones</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group" id="listaModalNotificaciones"></ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger me-auto" id="btnLimpiarNotificaciones">Limpiar notificaciones</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+  </nav>
+  <script>
+    // Renderizado dinámico del menú según rol
+    document.addEventListener('DOMContentLoaded', function() {
+      // Botón para limpiar notificaciones (campanita)
+      document.getElementById('btnLimpiarNotificaciones')?.addEventListener('click', function() {
+        const user = JSON.parse(localStorage.getItem('activeUser'));
+        if (!user) return;
+        if (user.rol === 'Estudiante') {
+          let notificaciones = JSON.parse(localStorage.getItem('notificacionesEstudiante')||'{}');
+          notificaciones[user.nombre] = [];
+          localStorage.setItem('notificacionesEstudiante', JSON.stringify(notificaciones));
+        } else {
+          let notifs = JSON.parse(localStorage.getItem('notificacionesSoporte')||'[]');
+          const destino = user.rol==='Administrador'?'admin':'biblioteca';
+          notifs = notifs.filter(n=>n.destino!==destino);
+          localStorage.setItem('notificacionesSoporte', JSON.stringify(notifs));
+        }
+        // Cerrar modal y refrescar badge
+        bootstrap.Modal.getInstance(document.getElementById('modalNotificaciones')).hide();
+        setTimeout(()=>window.location.reload(), 300);
+      });
+      const user = JSON.parse(localStorage.getItem('activeUser'));
+      const nav = document.getElementById('mainNavLinks');
+      if (!user || !nav) return;
+      let links = [
+        {href:'dashboard.html', label:'Dashboard'},
+        {href:'books.html', label:'Libros'},
+        {href:'loans.html', label:'Préstamos'},
+        {href:'reservations.html', label:'Reservas'}
+      ];
+      if (user.rol !== 'Estudiante') {
+        links.splice(1, 0, {href:'users.html', label:'Usuarios'});
+        links.push({href:'reports.html', label:'Reportes'});
+      }
+      nav.innerHTML = links.map(l => `<a href="${l.href}" class="btn btn-outline-light${location.pathname.endsWith(l.href)?' active':''}">${l.label}</a>`).join('');
+      // Avatar y menú usuario
+      document.getElementById('userMenuName').textContent = user.nombre;
+      document.getElementById('userMenuRol').textContent = user.rol;
+      // Foto de perfil
+      const avatarImg = document.getElementById('avatarImg');
+      if (user.fotoPerfil) avatarImg.src = user.fotoPerfil;
+    });
+    // Funciones de menú usuario (stubs)
+    function showEditProfile() {
+      const user = JSON.parse(localStorage.getItem('activeUser'));
+      if (!user) return;
+      document.getElementById('editNombre').value = user.nombre;
+      document.getElementById('editEmail').value = user.email;
+      document.getElementById('editPassword').value = user.password;
+      // Facultades y carreras
+      // Mostrar/ocultar campos según rol
+      const facultadGroup = document.getElementById('facultadEditGroup');
+      const carreraGroup = document.getElementById('carreraEditGroup');
+      const facultadSel = document.getElementById('editFacultad');
+      const carreraSel = document.getElementById('editCarrera');
+      if(user.rol === 'Estudiante') {
+        facultadGroup.style.display = '';
+        carreraGroup.style.display = '';
+        facultadSel.required = true;
+        carreraSel.required = true;
+      } else {
+        facultadGroup.style.display = 'none';
+        carreraGroup.style.display = 'none';
+        facultadSel.required = false;
+        carreraSel.required = false;
+      }
+      const carrerasPorFacultad = {
+        'Facultad de Ingeniería y Arquitectura': [
+          'Ingeniería en Sistemas Informáticos',
+          'Ingeniería Civil',
+          'Arquitectura',
+          'Ingeniería Industrial',
+          'Ingeniería Eléctrica'
+        ],
+        'Facultad de Ciencias Económicas': [
+          'Administración de Empresas',
+          'Contaduría Pública'
+        ],
+        'Facultad de Ciencias y Humanidades': [
+          'Trabajo Social',
+          'Psicología',
+          'Educación',
+          'Idiomas'
+        ],
+        'Facultad de Ciencias de la Salud': [
+          'Enfermería',
+          'Medicina',
+          'Nutrición',
+          'Laboratorio Clínico'
+        ]
+      };
+      const fac = user.facultad;
+      if(user.carrera && fac && carrerasPorFacultad[fac] && carrerasPorFacultad[fac].includes(user.carrera)) {
+        carreraSel.value = user.carrera;
+      }
+      facultadSel.onchange = actualizarCarrerasEdit;
+      if(user.rol === 'Estudiante') actualizarCarrerasEdit();
+      const modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+      modal.show();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('editProfileForm');
+      if (form) {
+        form.onsubmit = function(e) {
+          e.preventDefault();
+          let user = JSON.parse(localStorage.getItem('activeUser'));
+          if (!user) return;
+          const oldEmail = user.email;
+          const oldPassword = user.password;
+          const newNombre = document.getElementById('editNombre').value;
+          const newEmail = document.getElementById('editEmail').value;
+          const newPassword = document.getElementById('editPassword').value;
+          user.nombre = newNombre;
+          user.email = newEmail;
+          user.password = newPassword;
+          // Guardar facultad y carrera solo si es estudiante
+          if(user.rol === 'Estudiante') {
+            user.facultad = document.getElementById('editFacultad').value;
+            user.carrera = document.getElementById('editCarrera').value;
+          } else {
+            user.facultad = '';
+            user.carrera = '';
+          }
+          // Actualizar en users (buscar por nombre original o email original)
+          let users = JSON.parse(localStorage.getItem('users')) || [];
+          const idx = users.findIndex(u => u.email === oldEmail || u.nombre === user.nombre);
+          if (idx !== -1) users[idx] = user;
+          localStorage.setItem('users', JSON.stringify(users));
+          localStorage.setItem('activeUser', JSON.stringify(user));
+          document.getElementById('userMenuName').textContent = user.nombre;
+          document.getElementById('userMenuRol').textContent = user.rol;
+          // Notificación por cambio de correo o contraseña
+          if (oldEmail !== newEmail || oldPassword !== newPassword) {
+            if (user.rol === 'Estudiante') {
+              let notificaciones = JSON.parse(localStorage.getItem('notificacionesEstudiante')||'{}');
+              if (!notificaciones[user.nombre]) notificaciones[user.nombre] = [];
+              let cambios = [];
+              if (oldEmail !== newEmail) cambios.push('correo electrónico');
+              if (oldPassword !== newPassword) cambios.push('contraseña');
+              notificaciones[user.nombre].push({
+                texto: `Se ha actualizado tu ${cambios.join(' y ')} correctamente.`,
+                tipo: 'info',
+                leida: false,
+                fecha: new Date().toISOString()
+              });
+              localStorage.setItem('notificacionesEstudiante', JSON.stringify(notificaciones));
+            } else {
+              // Para admin/biblio, notificación simple (puedes personalizar si quieres)
+              let notifs = JSON.parse(localStorage.getItem('notificacionesManual')||'[]');
+              let cambios = [];
+              if (oldEmail !== newEmail) cambios.push('correo electrónico');
+              if (oldPassword !== newPassword) cambios.push('contraseña');
+              notifs.push({
+                destino: user.nombre,
+                email: user.email,
+                mensaje: `Se ha actualizado tu ${cambios.join(' y ')} correctamente.`,
+                titulo: 'Actualización de perfil',
+                fecha: new Date().toISOString()
+              });
+              localStorage.setItem('notificacionesManual', JSON.stringify(notifs));
+            }
+          }
+          // Refrescar tabla de usuarios si está visible (admin)
+          if (document.getElementById('adminRecentUsers')) {
+            setTimeout(()=>window.location.reload(), 300);
+          }
+          bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+          alert('Perfil actualizado correctamente.');
+        }
+      }
+    });
+    function showUpdatePhoto() {
+      const user = JSON.parse(localStorage.getItem('activeUser'));
+      const preview = document.getElementById('previewFotoPerfil');
+      preview.src = user && user.fotoPerfil ? user.fotoPerfil : 'assets/avatar-default.png';
+      document.getElementById('fotoPerfilInput').value = '';
+      const modal = new bootstrap.Modal(document.getElementById('updatePhotoModal'));
+      modal.show();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const fotoInput = document.getElementById('fotoPerfilInput');
+      if (fotoInput) {
+        fotoInput.onchange = function(e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            document.getElementById('previewFotoPerfil').src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+      const form = document.getElementById('updatePhotoForm');
+      if (form) {
+        form.onsubmit = function(e) {
+          e.preventDefault();
+          const file = document.getElementById('fotoPerfilInput').files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            let user = JSON.parse(localStorage.getItem('activeUser'));
+            if (!user) return;
+            user.fotoPerfil = ev.target.result;
+            // Actualizar en users
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const idx = users.findIndex(u => u.email === user.email || u.nombre === user.nombre);
+            if (idx !== -1) users[idx] = user;
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('activeUser', JSON.stringify(user));
+            document.getElementById('avatarImg').src = user.fotoPerfil;
+            bootstrap.Modal.getInstance(document.getElementById('updatePhotoModal')).hide();
+            alert('Foto de perfil actualizada.');
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    });
+    function logout(){ localStorage.removeItem('activeUser'); window.location.href = 'login.html'; }
+    window.showEditProfile = showEditProfile;
+    window.showUpdatePhoto = showUpdatePhoto;
+    window.logout = logout;
+  </script>
+  <div class="container mt-4">
+  <!-- DASHBOARD ADMINISTRADOR -->
+  <div id="adminDashboard" style="display:none;">
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-4 text-center border-primary border-2 mb-2">
+          <h2 class="fw-bold mb-2" id="adminWelcome"></h2>
+          <div class="lead text-secondary mb-0" id="adminRecomendaciones"></div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-primary border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#1E3A8A;"><i class="bi bi-book"></i></div>
+            <h6 class="card-title mb-1">Libros</h6>
+            <p class="card-text h2 mb-0" id="adminBooksCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-success border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#10B981;"><i class="bi bi-journal-check"></i></div>
+            <h6 class="card-title mb-1">Préstamos Activos</h6>
+            <p class="card-text h2 mb-0" id="adminLoansCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-warning border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#F59E42;"><i class="bi bi-calendar-check"></i></div>
+            <h6 class="card-title mb-1">Reservas Activas</h6>
+            <p class="card-text h2 mb-0" id="adminReservationsCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-info border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#0ea5e9;"><i class="bi bi-people"></i></div>
+            <h6 class="card-title mb-1">Usuarios</h6>
+            <p class="card-text h2 mb-0" id="adminUsersCount">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tarjetas resumen de roles -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card text-center border-secondary border-2">
+          <div class="card-body">
+            <div style="font-size:2em;color:#6366f1;"><i class="bi bi-mortarboard"></i></div>
+            <h6 class="card-title mb-1">Estudiantes</h6>
+            <p class="card-text h3 mb-0" id="adminEstudiantesCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center border-info border-2">
+          <div class="card-body">
+            <div style="font-size:2em;color:#0ea5e9;"><i class="bi bi-person-badge"></i></div>
+            <h6 class="card-title mb-1">Bibliotecarios</h6>
+            <p class="card-text h3 mb-0" id="adminBibliotecariosCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center border-dark border-2">
+          <div class="card-body">
+            <div style="font-size:2em;color:#111827;"><i class="bi bi-person-gear"></i></div>
+            <h6 class="card-title mb-1">Administradores</h6>
+            <p class="card-text h3 mb-0" id="adminAdminsCount">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Notificaciones importantes -->
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-3 border-secondary border-2">
+          <h6 class="mb-2 text-secondary"><i class="bi bi-bar-chart"></i> Top 5 Estudiantes Lectores</h6>
+          <div id="adminStudentRanking"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="alert alert-info d-flex align-items-center" role="alert">
+          <i class="bi bi-info-circle me-2" style="font-size:1.5em;"></i>
+          <div>
+            ¡Recuerda revisar los reportes y mantener actualizada la base de usuarios y libros!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card p-3 border-danger border-2">
+          <h6 class="mb-2 text-danger"><i class="bi bi-exclamation-triangle"></i> Alertas</h6>
+          <ul class="mb-0" id="adminAlertsList" style="min-height:60px;"></ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 border-info border-2">
+          <h6 class="mb-2 text-info"><i class="bi bi-funnel"></i> Filtros rápidos</h6>
+          <div id="adminFilters"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 border-success border-2">
+          <h6 class="mb-2 text-success"><i class="bi bi-lightning-charge"></i> Accesos directos</h6>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" onclick="window.location='users.html'">Ver usuarios</button>
+            <button class="btn btn-warning" onclick="window.location='books.html'">Ver libros</button>
+            <button class="btn btn-dark" onclick="window.location='reports.html'">Generar reporte</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Gráfica de usuarios por facultad y usuarios recientes -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3 border-primary border-2">
+          <h6 class="mb-3">Usuarios por Facultad</h6>
+          <canvas id="adminChartFacultades" height="180"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3 border-info border-2">
+          <h6 class="mb-3">Usuarios Recientes</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Facultad</th>
+                </tr>
+              </thead>
+              <tbody id="adminRecentUsers"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Libros prestados vs disponibles</h6>
+          <canvas id="adminChartLibros" height="180"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Préstamos y reservas por día</h6>
+          <canvas id="adminChartMovimientos" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-3 border-secondary border-2">
+          <h6 class="mb-2 text-secondary"><i class="bi bi-clock-history"></i> Últimas actividades</h6>
+          <ul class="mb-0" id="adminActivityList" style="min-height:60px;"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- DASHBOARD BIBLIOTECARIO -->
+  <div id="bibliotecarioDashboard" style="display:none;">
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-4 text-center border-primary border-2 mb-2">
+          <h2 class="fw-bold mb-2" id="biblioWelcome"></h2>
+          <div class="lead text-secondary mb-0" id="biblioRecomendaciones"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Copia del dashboard de administrador adaptado para bibliotecario -->
+    <!-- KPIs bibliotecario: solo Libros, Préstamos y Reservas activos -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card text-center py-3 border-primary border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#1E3A8A;"><i class="bi bi-book"></i></div>
+            <h6 class="card-title mb-1">Libros</h6>
+            <p class="card-text h2 mb-0" id="biblioBooksCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center py-3 border-success border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#10B981;"><i class="bi bi-journal-check"></i></div>
+            <h6 class="card-title mb-1">Préstamos Activos</h6>
+            <p class="card-text h2 mb-0" id="biblioLoansCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center py-3 border-warning border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#F59E42;"><i class="bi bi-calendar-check"></i></div>
+            <h6 class="card-title mb-1">Reservas Activas</h6>
+            <p class="card-text h2 mb-0" id="biblioReservationsCount">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Notificaciones importantes -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card p-3 border-danger border-2">
+          <h6 class="mb-2 text-danger"><i class="bi bi-exclamation-triangle"></i> Alertas</h6>
+          <ul class="mb-0" id="biblioAlertsList" style="min-height:60px;"></ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 border-info border-2">
+          <h6 class="mb-2 text-info"><i class="bi bi-funnel"></i> Filtros rápidos</h6>
+          <div id="biblioFilters"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 border-success border-2">
+          <h6 class="mb-2 text-success"><i class="bi bi-lightning-charge"></i> Accesos directos</h6>
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" onclick="window.location='users.html'">Ver usuarios</button>
+            <button class="btn btn-warning" onclick="window.location='books.html'">Ver libros</button>
+            <button class="btn btn-dark" onclick="window.location='reports.html'">Generar reporte</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Gráfica de usuarios por facultad y usuarios recientes -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3 border-primary border-2">
+          <h6 class="mb-3">Usuarios por Facultad</h6>
+          <canvas id="biblioChartFacultades" height="180"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3 border-info border-2">
+          <h6 class="mb-3">Usuarios Recientes</h6>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Facultad</th>
+                </tr>
+              </thead>
+              <tbody id="biblioRecentUsers"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Libros prestados vs disponibles</h6>
+          <canvas id="biblioChartLibros" height="180"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Préstamos y reservas por día</h6>
+          <canvas id="biblioChartMovimientos" height="180"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-3 border-secondary border-2">
+          <h6 class="mb-2 text-secondary"><i class="bi bi-clock-history"></i> Últimas actividades</h6>
+          <ul class="mb-0" id="biblioActivityList" style="min-height:60px;"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- DASHBOARD ESTUDIANTE -->
+  <div id="studentDashboard" style="display:none;">
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-4 text-center border-primary border-2 mb-2">
+          <h2 class="fw-bold mb-2" id="studentWelcome"></h2>
+          <div class="lead text-secondary mb-0" id="fraseMotivacional"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-primary border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#1E3A8A;"><i class="bi bi-journal-check"></i></div>
+            <h6 class="card-title mb-1">Préstamos Activos</h6>
+            <p class="card-text h2 mb-0" id="studentLoansCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-success border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#10B981;"><i class="bi bi-calendar-check"></i></div>
+            <h6 class="card-title mb-1">Reservas Activas</h6>
+            <p class="card-text h2 mb-0" id="studentReservationsCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-info border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#0ea5e9;"><i class="bi bi-clock-history"></i></div>
+            <h6 class="card-title mb-1">Historial</h6>
+            <p class="card-text h2 mb-0" id="studentHistoryCount">0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-center py-3 border-danger border-2">
+          <div class="card-body">
+            <div style="font-size:2.2em;color:#DC2626;"><i class="bi bi-cash-coin"></i></div>
+            <h6 class="card-title mb-1">Multas Pendientes</h6>
+            <p class="card-text h2 mb-0" id="studentFinesCount">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Progreso de Lectura</h6>
+          <div id="studentProgress"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Reto Mensual</h6>
+          <div id="studentMonthlyChallenge"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Gráfica de Géneros Favoritos</h6>
+          <canvas id="chartStudentCategorias" height="140"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h6 class="mb-3">Actividad Mensual</h6>
+          <canvas id="chartStudentDias" height="140"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card p-3 border-info border-2">
+          <h6 class="mb-2 text-info"><i class="bi bi-lightbulb"></i> Recomendaciones</h6>
+          <ul class="mb-0" id="studentRecommendations"></ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 border-warning border-2">
+          <h6 class="mb-2 text-warning"><i class="bi bi-bell"></i> Notificaciones</h6>
+          <ul class="mb-0" id="studentNotifications"></ul>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-3 border-success border-2">
+          <h6 class="mb-2 text-success"><i class="bi bi-lightning-charge"></i> Acciones Rápidas</h6>
+          <div class="d-grid gap-2" id="studentQuickActions"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card p-3 border-primary border-2">
+          <h6 class="mb-2 text-primary"><i class="bi bi-award"></i> Insignias y Logros</h6>
+          <div id="studentBadges"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card p-3 border-secondary border-2">
+          <h6 class="mb-2 text-secondary"><i class="bi bi-bar-chart"></i> Ranking de Lectura</h6>
+          <div id="studentRanking"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-4 mb-4">
+      <div class="col-12">
+        <div class="card p-3 border-info border-2">
+          <h6 class="mb-2 text-info"><i class="bi bi-question-circle"></i> Soporte y Ayuda</h6>
+          <div id="studentHelp">
+            <a href="#" class="btn btn-outline-info btn-sm">Preguntas Frecuentes</a>
+            <a href="#" class="btn btn-outline-info btn-sm" onclick="abrirModalSoporte('biblioteca')">Contactar Biblioteca</a>
+            <a href="#" class="btn btn-outline-primary btn-sm" onclick="abrirModalSoporte('admin')">Contactar Administrador</a>
+  <!-- Modal Soporte/Contacto -->
+  <div class="modal fade" id="modalSoporte" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="tituloModalSoporte">Contacto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <textarea class="form-control" id="mensajeSoporte" rows="4" placeholder="Describe tu problema o consulta..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnEnviarSoporte">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.abrirModalSoporte = function(destino) {
+      document.getElementById('mensajeSoporte').value = '';
+      document.getElementById('tituloModalSoporte').textContent = destino==='admin' ? 'Contactar Administrador' : 'Contactar Biblioteca';
+      const modal = new bootstrap.Modal(document.getElementById('modalSoporte'));
+      modal.show();
+      document.getElementById('btnEnviarSoporte').onclick = function() {
+        const mensaje = document.getElementById('mensajeSoporte').value.trim();
+        if (!mensaje) { alert('Por favor escribe tu mensaje.'); return; }
+        const activeUser = JSON.parse(localStorage.getItem('activeUser'));
+        let notifs = JSON.parse(localStorage.getItem('notificacionesSoporte')||'[]');
+        notifs.push({
+          origen: activeUser.nombre,
+          email: activeUser.email,
+          destino: destino,
+          mensaje,
+          fecha: new Date().toISOString(),
+          leida: false
+        });
+        localStorage.setItem('notificacionesSoporte', JSON.stringify(notifs));
+        modal.hide();
+        let div = document.createElement('div');
+        div.className = 'alert alert-success position-fixed top-0 end-0 m-4 shadow';
+        div.style.zIndex = 9999;
+        div.innerHTML = `Mensaje enviado correctamente.`;
+        document.body.appendChild(div);
+        setTimeout(()=>{ div.remove(); }, 3500);
+      };
+    }
+  </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/comprobante-estudiante.js"></script>
+  <script src="js/dashboard.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script> -->
+  <script src="js/dashboard-charts.js"></script>
+</body>
+<script>
+// Sincronizar y mostrar foto de perfil en el menú y modal
+document.addEventListener('DOMContentLoaded', function() {
+  var avatar = document.getElementById('avatarImg');
+  var userMenuFoto = document.getElementById('userMenuFoto');
+  var verFotoPerfilMenu = document.getElementById('verFotoPerfilMenu');
+  function syncFotoPerfil() {
+    if (avatar && userMenuFoto) userMenuFoto.src = avatar.src;
+  }
+  syncFotoPerfil();
+  if (avatar) {
+    avatar.addEventListener('load', syncFotoPerfil);
+  }
+  if (userMenuFoto) {
+    userMenuFoto.onclick = function(e) {
+      e.preventDefault();
+      var modal = new bootstrap.Modal(document.getElementById('modalVerFotoPerfil'));
+      var img = document.getElementById('imgVerFotoPerfil');
+      img.src = userMenuFoto.src;
+      modal.show();
+    };
+  }
+  if (verFotoPerfilMenu) {
+    verFotoPerfilMenu.onclick = function(e) {
+      e.preventDefault();
+      var modal = new bootstrap.Modal(document.getElementById('modalVerFotoPerfil'));
+      var img = document.getElementById('imgVerFotoPerfil');
+      img.src = userMenuFoto.src;
+      modal.show();
+    };
+  }
+});
+</script>
+<script>
+// Permitir ver la foto de perfil en grande desde el modal de actualizar foto
+// (solo desde el modal, no desde el menú)
+document.addEventListener('DOMContentLoaded', function() {
+  var preview = document.getElementById('previewFotoPerfil');
+  if (preview) {
+    preview.onclick = function() {
+      var modal = new bootstrap.Modal(document.getElementById('modalVerFotoPerfil'));
+      var img = document.getElementById('imgVerFotoPerfil');
+      img.src = preview.src;
+      modal.show();
+    };
+  }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

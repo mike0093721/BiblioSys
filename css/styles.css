@@ -1,0 +1,136 @@
+/* Forzar visibilidad del QR en el modal de préstamos */
+#qrCodeDiv {
+  background: #fff !important;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 1em auto;
+  border: 2px dashed #4DB2FF;
+  display: block;
+  overflow: hidden;
+}
+/* Animaciones para notificaciones flotantes */
+.fade-in-notif {
+  animation: fadeInNotif 0.5s;
+}
+.fade-out-notif {
+  animation: fadeOutNotif 0.5s forwards;
+}
+@keyframes fadeInNotif {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOutNotif {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-30px); }
+}
+/* Paleta BiblioSys: azul #4DB2FF, negro #18191b, gris #23242a, blanco #fff, verde #10B981 */
+:root {
+  --bs-primary: #4DB2FF;
+  --bs-bg: #18191b;
+  --bs-bg-light: #23242a;
+  --bs-success: #10B981;
+  --bs-text: #fff;
+  --bs-font: 'Poppins', 'Roboto', Arial, sans-serif;
+}
+body {
+  font-family: var(--bs-font);
+  background: var(--bs-bg);
+  color: var(--bs-text);
+}
+.bg-primary {
+  background-color: var(--bs-primary) !important;
+}
+.navbar {
+  background: var(--bs-bg-light) !important;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 16px #4db2ff22;
+}
+.navbar-brand img {
+  margin-right: 12px;
+  height: 38px;
+}
+.card {
+  background: var(--bs-bg-light);
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px #4db2ff12;
+  color: var(--bs-text);
+}
+h1, h2, h3, h4 {
+  font-weight: 700;
+  color: var(--bs-primary);
+  letter-spacing: -1px;
+}
+.btn-success, .btn-success:focus {
+  background-color: var(--bs-success) !important;
+  border-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+.btn-primary, .btn-primary:focus {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+  color: #fff !important;
+}
+.btn-accent {
+  background-color: #FFD600 !important; /* amarillo fuerte */
+  color: #18191b !important;
+  border-color: #FFD600 !important;
+  font-weight: 600;
+  box-shadow: 0 2px 8px #ffd60033;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-accent:hover, .btn-accent:focus {
+  background-color: #FFC400 !important;
+  color: #18191b !important;
+}
+.table th, .table td {
+  vertical-align: middle;
+}
+.table thead {
+  background: #eaf2fc;
+}
+.form-control, .form-select {
+  border-radius: 0.7rem !important;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--bs-accent);
+  box-shadow: 0 0 0 2px #4db2ff55;
+}
+::-webkit-scrollbar { width: 8px; background: #e9ecef; }
+::-webkit-scrollbar-thumb { background: #4db2ff; border-radius: 8px; }
+/* Modal registro BiblioSys */
+.modal-content {
+  background: var(--bs-bg-light) !important;
+  color: var(--bs-text) !important;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px #4db2ff22;
+}
+.modal-header, .modal-footer {
+  border: none;
+  background: transparent;
+}
+.modal-title {
+  color: var(--bs-primary) !important;
+  font-weight: 700;
+}
+.modal .form-control {
+  background: #23242a;
+  color: #fff;
+  border: 1px solid #4DB2FF;
+  border-radius: 0.7rem;
+}
+.modal .form-control:focus {
+  background: #18191b;
+  color: #fff;
+  border-color: #10B981;
+  box-shadow: 0 0 0 2px #10B98133;
+}
+.modal .btn-success {
+  background-color: var(--bs-success) !important;
+  border-color: var(--bs-success) !important;
+  color: #fff !important;
+}
+.modal .btn-secondary {
+  background: #444 !important;
+  border: none;
+  color: #fff !important;
+}

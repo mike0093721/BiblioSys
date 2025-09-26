@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba QRCode</title>
+</head>
+<body style="background:#222;color:#fff;font-family:sans-serif;">
+  <h2>Prueba de QRCode.js local</h2>
+  <div id="qrTest" style="margin:2em auto;width:200px;height:200px;background:#fff;"></div>
+  <button onclick="generarQR()">Generar QR</button>
+  <div id="qrStatus" style="margin-top:1em;color:#f00;"></div>
+  <script src="js/qrcode.min.js?v=20250926"></script>
+  <script>
+    function generarQR() {
+      document.getElementById('qrTest').innerHTML = '';
+      if (typeof QRCode !== 'function') {
+        document.getElementById('qrStatus').innerText = 'Error: QRCode no está disponible. El archivo js/qrcode.min.js no se cargó.';
+        return;
+      }
+      new QRCode(document.getElementById('qrTest'), {
+        text: '¡Funciona QR local!',
+        width: 180,
+        height: 180,
+        colorDark: '#000000',
+        colorLight: '#ffffff'
+      });
+      document.getElementById('qrStatus').innerText = '';
+    }
+  </script>
+</body>
+</html>
